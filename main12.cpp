@@ -12,7 +12,7 @@ int main() {
 	Mat img2 = imread("./imgs/melyseg.png", IMREAD_GRAYSCALE);
 
 	if (img1.empty() || img2.empty()) {
-		cout << "Az kep nem olvashat�." << endl;
+		cout << "image not readable" << endl;
 		exit(-1);
 	}
 

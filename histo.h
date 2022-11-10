@@ -6,8 +6,8 @@ Kepfeld. gyak. - nehany segedfuggveny az orai anyag konnyebb szemleltetesehez.
 #ifndef HISTO_H_
 #define HISTO_H_
 
-#include <vector>
 #include <opencv2/core.hpp>
+#include <vector>
 
 using namespace std;
 using namespace cv;
@@ -127,8 +127,8 @@ void Histo::drawHistoC3(const vector<cv::Mat> histos, vector<cv::Mat>& canvases)
 
 
 void Histo::showHisto(Mat img, string title, int wait) {
-	assert(img.type() == CV_8UC1 || img.type() == CV_8UC3);
 
+	assert(img.type() == CV_8UC1 || img.type() == CV_8UC3);
 	if (img.type() == CV_8UC1) {
 		Mat histo;
 		Histo::calcHistoC1(img, histo);
@@ -152,7 +152,72 @@ void Histo::showHisto(Mat img, string title, int wait) {
 			imshow(title + "-" + str[i], canvases[i]);
 		}
 	}
+
 	waitKey(wait);
+}
+
+void equalizeHistColor1(const Mat img, Mat& dest) {
+
+	vector<Mat> chs;
+	split(img.clone(), chs);
+	equalizeHist(chs[0], chs[0]);
+	equalizeHist(chs[1], chs[1]);
+	equalizeHist(chs[2], chs[2]);
+	merge(chs, dest);
+}
+
+void equalizeHistColor2(const Mat img, Mat& dest) {
+
+	Mat lab;
+	cvtColor(img, lab, COLOR_BGR2Lab);
+
+	vector<Mat> chs;
+	split(lab, chs);
+
+	equalizeHist(chs[0], chs[0]);
+
+	Mat dest_lab;
+	merge(chs, dest_lab);
+
+	cvtColor(dest_lab, dest, COLOR_Lab2BGR);
+}
+
+void createHisto(const cv::Mat img, cv::Mat& histo) {
+
+	vector<Mat> kepek;       
+	kepek.push_back(img); // egy k�pet haszn�lunk
+	
+	vector<int> csatornak;         
+	csatornak.push_back(0); // annak az egy k�pnek a 0. csatorn�j�t haszn�ljuk
+	
+	vector<int> hiszto_meretek; 
+	hiszto_meretek.push_back(256);  //minden vil�goss�gk�dot k�l�n sz�molunk
+
+	vector<float> hiszto_tartomanyok;
+	hiszto_tartomanyok.push_back(0.0f); //hol kezd�dik a tartom�ny
+	hiszto_tartomanyok.push_back(255);  //meddig tart
+   
+	//accumlate: marad false (null�zza a hisztogrammot)
+	calcHist(kepek, csatornak, noArray(), histo, hiszto_meretek, hiszto_tartomanyok, false);
+}
+
+int calc_th_value(const Mat src, float fg_ratio = 1.0f) {
+
+	Mat histo;
+	createHisto(src, histo);
+
+	float osszes = src.cols * src.rows; //összes képpont száma
+	float sum = 0;
+	int th = 0;
+
+	for (int i = 0; i < histo.rows; ++i) {
+		sum += histo.at<float>(i);
+		if ( (sum / osszes) > fg_ratio ) {
+			return i;
+		}
+	}
+
+	return 255;
 }
 
 #endif HISTO_H_

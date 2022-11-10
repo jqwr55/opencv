@@ -8,36 +8,6 @@
 using namespace std;
 using namespace cv;
 
-/// <summary>
-/// Szintorzulashoz vezethet!
-/// </summary>
-/// <param name="img"></param>
-/// <param name="dest"></param>
-void equalizeHistColor1(const Mat img, Mat& dest) {
-	vector<Mat> chs;
-	split(img.clone(), chs);
-	equalizeHist(chs[0], chs[0]);
-	equalizeHist(chs[1], chs[1]);
-	equalizeHist(chs[2], chs[2]);
-	merge(chs, dest);
-}
-
-void equalizeHistColor2(const Mat img, Mat& dest) {
-	Mat lab;
-	cvtColor(img, lab, COLOR_BGR2Lab);
-
-	vector<Mat> chs;
-	split(lab, chs);
-
-	equalizeHist(chs[0], chs[0]);
-
-	Mat dest_lab;
-	merge(chs, dest_lab);
-
-	cvtColor(dest_lab, dest, COLOR_Lab2BGR);
-}
-
-
 int main() {
 
 	Mat img = imread("./imgs/orange1.jpg", IMREAD_COLOR);

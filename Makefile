@@ -72,15 +72,16 @@ MAKE_TARGET_RUNS =																\
 MAKE_TARGETS_COMPILE_FILE = 													\
 	$(foreach i, $(shell seq $(words $(1))), 									\
 		$(eval IT_TARGET = $(word $(i),$(1)))									\
-		$(eval IT_SRC    = $(word $(i),$(2)))									\
-		$(eval IT_OBJ    = $(word $(i),$(3)))									\
+		$(eval IT_DEPS 	 = $(word $(i),$(2)))									\
+		$(eval IT_SRC    = $(word $(i),$(3)))									\
+		$(eval IT_OBJ    = $(word $(i),$(4)))									\
 		$(eval 																	\
 			$(call make-target-build-path, 										\
 				$(IT_TARGET),													\
 				$(IT_SRC),														\
-				$(MAKE_FILE), 													\
+				$(IT_DEPS) $(MAKE_FILE), 													\
 				$(IT_OBJ),														\
-				$(4),															\
+				$(5),															\
 			)																	\
 		)																		\
 	)
@@ -88,7 +89,7 @@ MAKE_TARGETS_COMPILE_FILE = 													\
 all: $(OBJ_FILE_PATHS)
 	@printf "$(GREEN)all built$(NONE)\n"
 
-$(call MAKE_TARGETS_COMPILE_FILE,$(OBJ_FILE_PATHS),$(SRC_FILE_PATHS),$(OBJ_FILE_PATHS), -g -std=c++17 -g -I ./ `pkg-config --cflags --libs opencv4`)
+$(call MAKE_TARGETS_COMPILE_FILE,$(OBJ_FILE_PATHS),./common.h ./histo.h,$(SRC_FILE_PATHS),$(OBJ_FILE_PATHS), -g -std=c++17 -I ./ `pkg-config --cflags --libs opencv4`)
 $(call MAKE_TARGET_RUNS,$(OBJ_FILES),$(OBJ_FILE_PATHS),$(OBJ_FILE_PATHS))
 
 purge:
