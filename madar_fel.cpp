@@ -4,7 +4,7 @@
 #include <opencv2/highgui.hpp>
 
 #include "common.h"
-#include "histo.h"
+
 
 using namespace std;
 using namespace cv;

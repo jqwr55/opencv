@@ -17,10 +17,6 @@ int main() {
 
 	Mat img = imread("./imgs/galaxy.jpg", IMREAD_GRAYSCALE);
 
-	// csak egy picit atmeretezem, 
-	// ha a kisebb kepet toltottek le, amit az elozo gyakorlatoknak hasznltunk, akkor tegyek megjegyzesbe
-	resize(img, img, Size(img.cols / 2, img.rows / 2));
-
     imshow("og", img);
     int kernel = 2;
     int itErode = 1;
@@ -42,14 +38,17 @@ int main() {
         // a dilatacioval a korvonal helyreall valamennyire
         // hasonlo a helyzet, mint a medianszuro eseteben: novelhetjuk a kernel meretet, ha tobb zajt akaruk eltavolitani
         // de a kutya orra is deformalodik majd rendesen
+
         Mat tmp, dest, dest2;
-        // morphologyEx(binary_img, dest, MORPH_OPEN, se);
+#if 1
+        morphologyEx(binary_img, dest, MORPH_OPEN, se, Point(-1,-1), itErode);
+
+#else
 
         erode(binary_img, binary_img, se, Point(-1,-1), itErode);
         dilate(binary_img, binary_img, se, Point(-1,-1), itDilate);
-
+#endif
         imshow("binary_img", binary_img);
-
 
         Mat composite;
         img.copyTo(composite, binary_img);
@@ -57,6 +56,8 @@ int main() {
     
         moveWindow("binary_img", 500, 0);
         moveWindow("final", 100, 0);
+
+        std:cout << itErode << " " << itDilate << endl;
     }
 	waitKey(0);
 }

@@ -89,7 +89,7 @@ MAKE_TARGETS_COMPILE_FILE = 													\
 all: $(OBJ_FILE_PATHS)
 	@printf "$(GREEN)all built$(NONE)\n"
 
-$(call MAKE_TARGETS_COMPILE_FILE,$(OBJ_FILE_PATHS),./common.h ./histo.h,$(SRC_FILE_PATHS),$(OBJ_FILE_PATHS), -g -std=c++17 -I ./ `pkg-config --cflags --libs opencv4`)
+$(call MAKE_TARGETS_COMPILE_FILE,$(OBJ_FILE_PATHS),./common.h,$(SRC_FILE_PATHS),$(OBJ_FILE_PATHS), -g -std=c++17 -I ./ `pkg-config --cflags --libs opencv4` -lX11)
 $(call MAKE_TARGET_RUNS,$(OBJ_FILES),$(OBJ_FILE_PATHS),$(OBJ_FILE_PATHS))
 
 purge:

@@ -5,10 +5,12 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
+#include "common.h"
+
 using namespace std;
 using namespace cv;
 
-#include "histo.h"
+
 
 int main() {
 

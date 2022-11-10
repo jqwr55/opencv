@@ -3,7 +3,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 
-//#include "histo.h"
+//
 
 using namespace std;
 using namespace cv;
